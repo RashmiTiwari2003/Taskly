@@ -100,7 +100,7 @@ const page = (props: Props) => {
           <div className='w-64 md:w-3/5 text-sm text-white md:text-base lg:text-xl'>Ditch the chaos and take control of your workday with Taskly - the intuitive task management solution that keeps you organized and productive.</div>
           <div className='flex gap-2 text-white'>
             <div className='text-white'>Access Taskly now</div>
-            <div className='text-blue-800 underline'><Link href={'/login'}>Login</Link></div>
+            <div className='font-semibold text-lg text-white underline'><Link href={'/login'}>Login</Link></div>
           </div>
         </div>
       </div>
@@ -161,7 +161,7 @@ const page = (props: Props) => {
       </div>
       <div id='footer' className='flex md:flex-row flex-col justify-center items-center gap-12 bg-slate-50 px-12 md:px-36 py-6 md:py-20 w-full h-full'>
         <div className='flex flex-col justify-center items-center gap-4 bg-white shadow-xl px-12 py-6 rounded-xl' >
-          <Image className='rounded-full' src='/images/sc_pic.jpg' alt='profile-photo' width={200} height={200} />
+          <Image className='rounded-full' src='/images/new-sc-photo.jpg' alt='profile-photo' width={200} height={200} />
           <div className='font-semibold text-lg'>Rashmi Tiwari</div>
           <div className='text-center'>
             SDE Intern | Web Developer | ML

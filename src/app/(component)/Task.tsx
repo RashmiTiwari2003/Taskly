@@ -7,6 +7,15 @@ import {
     DialogTitle,
     DialogDescription,
 } from "@/components/ui/dialog"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { ChevronDown } from 'lucide-react';
 import { updateTask } from '@/states/taskApi';
 import userStore from '@/states/store';
 import Select, { MultiValue } from 'react-select'
@@ -39,6 +48,15 @@ interface TaskType {
     dueDate?: Date | null;
 }
 
+interface ColumnsState {
+    [key: string]: {
+        id: string;
+        name: string;
+        order: number;
+        Tasks: TaskType[];
+    };
+}
+
 interface TaskProps {
     openTask: boolean;
     setOpenTask: Dispatch<SetStateAction<boolean>>;
@@ -47,6 +65,7 @@ interface TaskProps {
     editingTask: TaskType;
     setEditingTask: Dispatch<SetStateAction<TaskType>>;
     setIsUpdated: () => void;
+    columns: ColumnsState;
 }
 
 interface OptionType {
@@ -54,7 +73,8 @@ interface OptionType {
     label: string;
 }
 
-const Task = ({ openTask, setOpenTask, taskId, taskColumnId, editingTask, setEditingTask, setIsUpdated }: TaskProps) => {
+const Task = ({ openTask, setOpenTask, taskId, taskColumnId, editingTask, setEditingTask, setIsUpdated, columns }: TaskProps) => {
+    // const { updated, setIsUpdated } = userStore()
     const [taskName, setTaskName] = useState('');
     const [taskContent, setTaskContent] = useState('');
     const [assignedToForTasks, setAssignedToForTasks] = useState<Record<string, string[]>>({});
@@ -185,13 +205,48 @@ const Task = ({ openTask, setOpenTask, taskId, taskColumnId, editingTask, setEdi
         );
     };
 
+    const handleColumnChange = (taskId: string, name: string, content: string, assignedByEmail: string, assignedToEmails: string[], columnId: string, startDate: Date | null, dueDate: Date | null) => {
+        updateTask(taskId, name, content, assignedByEmail, assignedToEmails, columnId, startDate, dueDate, setIsUpdated)
+        setOpenTask(false)
+        toast.success("Task moved successfully")
+    }
+
     return (
         <>
             <Dialog open={openTask} onOpenChange={setOpenTask}>
                 <DialogContent className="flex md:flex-row flex-col py-4 md:py-12 min-w-[90%] md:min-h-[85%] max-h-[90%]">
                     <ToastContainer />
                     <DialogHeader>
-                        <DialogTitle></DialogTitle>
+                        <DialogTitle>
+                            <div className='flex justify-end items-center md:hidden px-3'>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <button><ChevronDown size={20} absoluteStrokeWidth /></button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className='flex flex-col md:hidden mx-4'>
+                                        <DropdownMenuLabel>{columns[taskColumnId].name}</DropdownMenuLabel>
+                                        <DropdownMenuSeparator />
+                                        {
+                                            Object.entries(columns)
+                                                .filter(([id]) => id !== taskColumnId)
+                                                .map(([id, column]) => {
+                                                    const currentColumn = columns[taskColumnId]
+
+                                                    return (
+                                                        <div key={id} onClick={() => handleColumnChange(taskId, taskName, taskContent, editingTask.assignedByEmail, editingTask.assignedToEmails, column.id, startDate, dueDate)}>
+                                                            <DropdownMenuItem>
+                                                                {currentColumn.order < column.order ?
+                                                                    `${currentColumn.name} >> ${column.name}` :
+                                                                    `${column.name} << ${currentColumn.name}`}
+                                                            </DropdownMenuItem>
+                                                        </div>
+                                                    );
+                                                })
+                                        }
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+                        </DialogTitle>
                         <DialogDescription></DialogDescription>
                     </DialogHeader>
                     <div className='px-2 md:px-4 w-full md:w-2/3' >

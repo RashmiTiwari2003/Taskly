@@ -96,9 +96,13 @@ const Tasks = () => {
     }
 
     useEffect(() => {
+        setOpenTask(false);
+    },[])
+
+    useEffect(() => {
         const fetchColumns = async () => {
             try {
-                console.log(email)
+                // console.log(email)
                 const response = await fetch(`${SERVER}/columns/${email}`);
                 const data = await response.json();
 
@@ -317,8 +321,8 @@ const Tasks = () => {
                     </div>
                 </div>
             </div>
-
-            <Task openTask={openTask} setOpenTask={setOpenTask} taskId={taskId} taskColumnId={taskColumnId} editingTask={editingTask} setEditingTask={setEditingTask} setIsUpdated={setIsUpdated} />
+            
+            {openTask && <Task openTask={openTask} setOpenTask={setOpenTask} taskId={taskId} taskColumnId={taskColumnId} editingTask={editingTask} setEditingTask={setEditingTask} setIsUpdated={setIsUpdated} columns={columns} />}
         </Protected>
     )
 }
