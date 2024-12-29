@@ -85,9 +85,9 @@ const Task = ({ openTask, setOpenTask, taskId, taskColumnId, editingTask, setEdi
 
     const handleStartDateChange = (date: Date | null) => {
         if (!date) return;
-        console.log(date)
+        // console.log(date)
 
-        const DueDate = editingTask.dueDate ?? null;
+        // const DueDate = editingTask.dueDate ?? null;
 
         if (dueDate && dueDate < date) {
             toast.error("Start Data cannot be greater than due date")
@@ -104,16 +104,16 @@ const Task = ({ openTask, setOpenTask, taskId, taskColumnId, editingTask, setEdi
             editingTask.assignedToEmails,
             taskColumnId,
             date,
-            DueDate,
+            dueDate,
             setIsUpdated
         );
     };
 
     const handleDueDateChange = (date: Date | null) => {
         if (!date) return;
-        console.log(date)
+        // console.log(date)
 
-        const StartDate = editingTask.startDate ?? null;
+        // const StartDate = editingTask.startDate ?? null;
 
         if (startDate && startDate > date) {
             toast.error("Due Data cannot be less than start date")
@@ -129,7 +129,7 @@ const Task = ({ openTask, setOpenTask, taskId, taskColumnId, editingTask, setEdi
             editingTask.assignedByEmail,
             editingTask.assignedToEmails,
             taskColumnId,
-            StartDate,
+            startDate,
             date,
             setIsUpdated
         );
